@@ -80,6 +80,9 @@
     where point_id = #{pointId,jdbcType=VARCHAR}
   </update>
   <select id="getTodayPoints" resultMap="BaseResultMap">
-    select pointinfo,createtime from userpoint where DATE_FORMAT(userpoint.createtime,'%Y-%m-%d') = #{today} ORDER BY createtime asc
+    select pointinfo,createtime from userpoint where DATE_FORMAT(userpoint.createtime,'%Y-%m-%d') = #{today} and userinfo_id = #{userid} ORDER BY createtime asc
+  </select>
+  <select id="getPointsIn" resultMap="BaseResultMap">
+    select pointinfo,createtime from userpoint where createtime<![CDATA[>]]>#{start} and createtime<![CDATA[<]]> #{timeend} and userinfo_id = #{userid} ORDER BY createtime asc
   </select>
 </mapper>

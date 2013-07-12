@@ -18,5 +18,7 @@ public interface UserpointMapper {
 
     int updateByPrimaryKey(Userpoint record);
 
-    List<Userpoint> getTodayPoints(@Param("today") String today);
+    List<Userpoint> getTodayPoints(@Param("userid") int userid,@Param("today") String today);
+
+    List<Userpoint> getPointsIn(@Param("userid") int userid,@Param("start") String start,@Param("timeend") String timeend);
 }

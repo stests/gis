@@ -19,7 +19,11 @@ public class UserpointService {
     UserpointMapper userpointMapper;
 
 
-    public List<Userpoint> getTodayPoints(String today) {
-        return userpointMapper.getTodayPoints(today);
+    public List<Userpoint> getTodayPoints(int userid,String today) {
+        return userpointMapper.getTodayPoints(userid,today);
+    }
+
+    public List<Userpoint> getPointsIn(int userid,String start, String end) {
+        return userpointMapper.getPointsIn(userid,start,end);
     }
 }

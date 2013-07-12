@@ -94,25 +94,8 @@
        });
        function line_today(){
           if(typeof(manager_user)!="undefined"&&manager_user.iconCls == 'icon-person'){
-              $.get('../userpoint/getPoints.action',{type:'today',start:'',end:''},function(res){
-
-                  var pointArray = new Array();
-                  if(res.length>0){
-                     var fp;
-                     for(var i=0;i<res.length;i++){
-                         var p = res[i].pointinfo.split(',');
-                         if(i==0){
-                             fp = new BMap.Point(p[0],p[1]);
-                         }
-                         pointArray.push(new BMap.Point(p[0],p[1]));
-                     }
-                     var polyline = new BMap.Polyline(pointArray, {strokeColor:"red", strokeWeight:3, strokeOpacity:0.5});
-                     map.addOverlay(polyline);
-                     map.centerAndZoom(fp, 15);
-
-
-
-                  }
+              $.get('../userpoint/getPoints.action',{type:'today',start:'',end:'',userid:manager_user.id},function(res){
+                  viewLines(res);
               },'json');
           }else{
               $.messager.alert('提示','请选择人员！');
@@ -120,9 +103,48 @@
        }
        function line_month(){
            if(manager_user.iconCls == 'icon-person'){
-
+               $.get('../userpoint/getPoints.action',{type:'month',start:'',end:'',userid:manager_user.id},function(res){
+                   viewLines(res);
+               },'json');
            }else{
                $.messager.alert('提示','请选择人员！');
+           }
+       }
+       function viewLines(res){
+           var pointArray = new Array();
+           if(res.length>0){
+               var fp;
+               var lp;
+               for(var i=0;i<res.length;i++){
+                   var p = res[i].pointinfo.split(',');
+                   if(i==0){
+                       fp = new BMap.Point(p[0],p[1]);
+                   }
+                   if(i==res.length-1){
+                       lp = new BMap.Point(p[0],p[1]);
+                   }
+                   pointArray.push(new BMap.Point(p[0],p[1]));
+               }
+               var polyline = new BMap.Polyline(pointArray, {strokeColor:"red", strokeWeight:3, strokeOpacity:0.5});
+               map.addOverlay(polyline);
+               map.centerAndZoom(fp, 15);
+
+               var opts = {
+                   position : fp,    // 指定文本标注所在的地理位置
+                   offset   : new BMap.Size(0,0)    //设置文本偏移量
+
+               }
+               var label = new BMap.Label("起点", opts);  // 创建文本标注对象
+               map.addOverlay(label);
+
+               var opts = {
+                   position : lp,    // 指定文本标注所在的地理位置
+                   offset   : new BMap.Size(5, -5)    //设置文本偏移量
+
+               }
+               var label = new BMap.Label("终点", opts);  // 创建文本标注对象
+               map.addOverlay(label);
+
            }
        }
     </script>
