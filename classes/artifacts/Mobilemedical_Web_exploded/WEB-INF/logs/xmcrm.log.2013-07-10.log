@@ -1,0 +1,7 @@
+2013-07-10 08:37:56,644 net.sf.ehcache.util.UpdateChecker(UpdateChecker.java:98) - New update(s) found: 2.6.5 [http://www.terracotta.org/confluence/display/release/Release+Notes+Ehcache+Core+2.6]. Please check http://ehcache.org for the latest version.
+2013-07-10 13:26:04,315 org.springframework.web.servlet.PageNotFound(DispatcherServlet.java:1080) - No mapping found for HTTP request with URI [/userinfo/index.action] in DispatcherServlet with name 'springmvc'
+2013-07-10 16:03:44,559 net.sf.ehcache.util.UpdateChecker(UpdateChecker.java:98) - New update(s) found: 2.6.5 [http://www.terracotta.org/confluence/display/release/Release+Notes+Ehcache+Core+2.6]. Please check http://ehcache.org for the latest version.
+2013-07-10 16:03:56,533 org.springframework.web.servlet.PageNotFound(DefaultHandlerExceptionResolver.java:183) - Request method 'POST' not supported
+2013-07-10 16:04:02,239 org.springframework.web.servlet.PageNotFound(DefaultHandlerExceptionResolver.java:183) - Request method 'POST' not supported
+2013-07-10 16:04:54,912 org.springframework.web.servlet.PageNotFound(DefaultHandlerExceptionResolver.java:183) - Request method 'GET' not supported
+2013-07-10 16:35:28,456 net.sf.ehcache.util.UpdateChecker(UpdateChecker.java:98) - New update(s) found: 2.6.5 [http://www.terracotta.org/confluence/display/release/Release+Notes+Ehcache+Core+2.6]. Please check http://ehcache.org for the latest version.

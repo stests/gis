@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+          http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+          http://www.springframework.org/schema/tx
+          http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+          http://www.springframework.org/schema/context
+          http://www.springframework.org/schema/context/spring-context-3.2.xsd
+          http://www.springframework.org/schema/aop
+          http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+          ">
+
+    <!-- 自动扫描组件，这里要把controler下面的 controller去除，他们是在spring3-servlet.xml中配置的，如果不去除会影响事务管理的。   -->
+    <context:component-scan base-package="com.mobilemedical">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+    </context:component-scan>
+
+	<!-- 数据池配置，上线后操作 -->
+	<bean id="dataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource">
+		<property name="alias" value="mysqlProxool" />
+		<property name="driver" value="com.mysql.jdbc.Driver" />
+		<property name="driverUrl"
+			value="jdbc:mysql://192.168.10.190:3306/mobilemedical?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull" />
+		<property name="user" value="root" />
+		<property name="password" value="root" />
+		<property name="minimumConnectionCount" value="2" />
+		<property name="maximumConnectionCount" value="10" />
+		<property name="prototypeCount" value="5" />
+		<!-- <property name="houseKeepingSleepTime" value="100000" /> -->
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<!-- datasource 配置jdbcTemplate -->
+		<property name="dataSource">
+			<ref local="dataSource" />
+		</property>
+	</bean>
+
+
+	<!-- myBatis配置 -->
+	<!-- 定义Mybatis的Session工厂,typeAliasesPackage为entity包全名,多个用逗号或者分号隔开 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="typeAliasesPackage" value="com.mobilemedical.model,com.mobilemedical.bean" />
+	</bean>
+
+	<!-- DAO层由 MapperScannerConfigurer自动生成mapper bean  -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.mobilemedical.mapper" />
+	</bean>
+
+
+
+	<!-- 事务 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="find*" read-only="true" />
+			<tx:method name="select*" read-only="true" />
+
+			<tx:method name="create*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+
+			<tx:method name="*" rollback-for="java.lang.Exception" />
+		</tx:attributes>
+	</tx:advice>
+	<aop:config>
+		<aop:advisor pointcut="execution(* com.mobilemedical.service.*Service.*(..))"
+			advice-ref="txAdvice" />
+	</aop:config>
+
+	<import resource="applicationContext-Cache.xml" />
+
+</beans>

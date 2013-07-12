@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mobilemedical.mapper.UsergroupMapper" >
+  <resultMap id="BaseResultMap" type="com.mobilemedical.model.Usergroup" >
+    <id column="usergroup_id" property="usergroupId" jdbcType="INTEGER" />
+    <result column="groupname" property="groupname" jdbcType="VARCHAR" />
+    <result column="parentid" property="parentid" jdbcType="INTEGER" />
+    <result column="parentText" property="parentText" jdbcType="VARCHAR" />
+    <result column="deleted" property="deleted" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    usergroup_id, groupname, parentid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from usergroup
+    where usergroup_id = #{usergroupId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from usergroup
+    where usergroup_id = #{usergroupId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mobilemedical.model.Usergroup" >
+    insert into usergroup (usergroup_id, groupname, parentid,deleted
+      )
+    values (#{usergroupId,jdbcType=INTEGER}, #{groupname,jdbcType=VARCHAR}, #{parentid,jdbcType=INTEGER}, #{deleted,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mobilemedical.model.Usergroup" >
+    insert into usergroup
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="usergroupId != null" >
+        usergroup_id,
+      </if>
+      <if test="groupname != null" >
+        groupname,
+      </if>
+      <if test="parentid != null" >
+        parentid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="usergroupId != null" >
+        #{usergroupId,jdbcType=INTEGER},
+      </if>
+      <if test="groupname != null" >
+        #{groupname,jdbcType=VARCHAR},
+      </if>
+      <if test="parentid != null" >
+        #{parentid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mobilemedical.model.Usergroup" >
+    update usergroup
+    <set >
+      <if test="groupname != null" >
+        groupname = #{groupname,jdbcType=VARCHAR},
+      </if>
+      <if test="parentid != null" >
+        parentid = #{parentid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where usergroup_id = #{usergroupId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mobilemedical.model.Usergroup" >
+    update usergroup
+    set groupname = #{groupname,jdbcType=VARCHAR},
+      parentid = #{parentid,jdbcType=INTEGER}
+    where usergroup_id = #{usergroupId,jdbcType=INTEGER}
+  </update>
+  <select id="getAll" resultMap="BaseResultMap" >
+    select item.*,(select groupname from usergroup where usergroup_id = item.parentid) parentText from usergroup item  where item.deleted = 0
+  </select>
+</mapper>

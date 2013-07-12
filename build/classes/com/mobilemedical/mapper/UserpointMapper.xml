@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mobilemedical.mapper.UserpointMapper" >
+  <resultMap id="BaseResultMap" type="com.mobilemedical.model.Userpoint" >
+    <id column="point_id" property="pointId" jdbcType="VARCHAR" />
+    <result column="userinfo_id" property="userinfoId" jdbcType="INTEGER" />
+    <result column="pointinfo" property="pointinfo" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    point_id, userinfo_id, pointinfo, createtime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from userpoint
+    where point_id = #{pointId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from userpoint
+    where point_id = #{pointId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.mobilemedical.model.Userpoint" >
+    insert into userpoint (point_id, userinfo_id, pointinfo, 
+      createtime)
+    values (#{pointId,jdbcType=VARCHAR}, #{userinfoId,jdbcType=INTEGER}, #{pointinfo,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mobilemedical.model.Userpoint" >
+    insert into userpoint
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pointId != null" >
+        point_id,
+      </if>
+      <if test="userinfoId != null" >
+        userinfo_id,
+      </if>
+      <if test="pointinfo != null" >
+        pointinfo,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pointId != null" >
+        #{pointId,jdbcType=VARCHAR},
+      </if>
+      <if test="userinfoId != null" >
+        #{userinfoId,jdbcType=INTEGER},
+      </if>
+      <if test="pointinfo != null" >
+        #{pointinfo,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mobilemedical.model.Userpoint" >
+    update userpoint
+    <set >
+      <if test="userinfoId != null" >
+        userinfo_id = #{userinfoId,jdbcType=INTEGER},
+      </if>
+      <if test="pointinfo != null" >
+        pointinfo = #{pointinfo,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=INTEGER},
+      </if>
+    </set>
+    where point_id = #{pointId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mobilemedical.model.Userpoint" >
+    update userpoint
+    set userinfo_id = #{userinfoId,jdbcType=INTEGER},
+      pointinfo = #{pointinfo,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=INTEGER}
+    where point_id = #{pointId,jdbcType=VARCHAR}
+  </update>
+  <select id="getTodayPoints" resultMap="BaseResultMap">
+    select pointinfo,createtime from userpoint where DATE_FORMAT(userpoint.createtime,'%Y-%m-%d') = #{today} ORDER BY createtime asc
+  </select>
+</mapper>
