@@ -111,6 +111,7 @@
            }
        }
        function viewLines(res){
+           map.clearOverlays();
            var pointArray = new Array();
            if(res.length>0){
                var fp;
